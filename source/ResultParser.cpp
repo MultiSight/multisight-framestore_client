@@ -504,12 +504,30 @@ void ResultParser::_BuildIndex()
             memcpy( sig, p.GetPtr(), 4 );
             p += 4;
 
+            // Read the segments id.
             word = p.Consume<uint32_t>();
             uint32_t segmentID = ntohl( word );
 
+            // Read the segments codec type.
+            word = p.Consume<uint32_t>();
+            MEDIA_PARSER::MEDIA_TYPE codecId = (MEDIA_PARSER::MEDIA_TYPE) ntohl( word );
+
+            // Read the segments media clockRate
+            word = p.Consume<uint32_t>();
+            uint32_t sourceClockRate = ntohl( word );
+
+            // Read the segments fmtp sdp track (media description) value.
+            word = p.Consume<uint32_t>();
+            uint32_t fmtpLength = ntohl( word );
+
+            XString fmtp;
+            if( fmtpLength > 0 )
+            {
+                fmtp = XString( (char*)p.GetPtr(), (size_t)fmtpLength );
+                p += (size_t)fmtpLength;
+            }
+
             uint32_t flags = 0;
-            uint32_t sourceClockRate = 0;
-            uint32_t mediaType = 0;
             int64_t framesStartOffset = 0;
             int64_t framesEndOffset = 0;
 
@@ -525,7 +543,11 @@ void ResultParser::_BuildIndex()
                 {
                     _currentSDP = XString( (char*)p.GetPtr(), (size_t)payloadSize );
 
-                    _ParseSDP( _currentSDP, sourceClockRate, mediaType );
+                    // TODO(frank.lamar): With the new segment values (codecId, sourceClockRate, and fmtp)
+                    // there doesn't really seem to be a reason to actually store the whole sdp.  This
+                    // method should also be updated to just parse the fmtp string for the sps, and pps
+                    // values.
+                    _ParseSDP( _currentSDP );
 
                     p += (size_t)payloadSize;
                 }
@@ -573,7 +595,7 @@ void ResultParser::_BuildIndex()
                         _index->Append<uint32_t>( frameFlags );
                         _index->Append<uint32_t>( flags );
                         _index->Append<uint32_t>( sourceClockRate );
-                        _index->Append<uint32_t>( mediaType );
+                        _index->Append<uint32_t>( codecId );
                         _index->Append<uint32_t>( resultSegmentIndex );
                         _index->Append<uint32_t>( segmentID );
                     }
@@ -586,9 +608,7 @@ void ResultParser::_BuildIndex()
     }
 }
 
-void ResultParser::_ParseSDP( const XString& sdp,
-                              uint32_t& sourceClockRate,
-                              uint32_t& mediaType )
+void ResultParser::_ParseSDP( const XString& sdp )
 {
     if( sdp.Contains( "video" ) )
     {
@@ -610,36 +630,6 @@ void ResultParser::_ParseSDP( const XString& sdp,
                                   sdp.c_str() ));
 
                     _SDPFrameRate = rightOfEqualsParts[1];
-                }
-                else if( rhs.StartsWith( "rtpmap" ) )
-                {
-                    vector<XString> rightOfEqualsParts;
-                    rhs.Split( " ", rightOfEqualsParts );
-
-                    if( rightOfEqualsParts.size() < 2 )
-                        X_THROW(( "Detected malformed SDP\n (%s).",
-                                  sdp.c_str() ));
-
-                    vector<XString> codecParts;
-                    rightOfEqualsParts[1].Split( "/", codecParts );
-
-                    if( codecParts.size() < 2 )
-                        X_THROW(( "Detected malformed SDP\n (%s).",
-                                  sdp.c_str() ));
-
-                    if( codecParts[0].ToLower() == "h264" )
-                    {
-                        mediaType = MEDIA_PARSER::MEDIA_TYPE_H264;
-                    }
-                    else if( codecParts[0].ToLower() == "mp4v-es" ||
-                             codecParts[0].ToLower() == "mpeg4-generic" )
-                    {
-                        mediaType = MEDIA_PARSER::MEDIA_TYPE_MPEG4;
-                    }
-                    else X_THROW(( "Unsupported codec\n (%s).",
-                                   sdp.c_str() ));
-
-                    sourceClockRate = codecParts[1].ToUInt32();
                 }
                 else if( rhs.Contains( "sprop-parameter-sets" ) )
                 {

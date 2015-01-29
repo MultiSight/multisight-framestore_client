@@ -69,9 +69,7 @@ public:
 
 private:
     void _BuildIndex();
-    void _ParseSDP( const XSDK::XString& sdp,
-                    uint32_t& sourceClockRate,
-                    uint32_t& mediaType );
+    void _ParseSDP( const XSDK::XString& sdp );
 
     uint32_t _GetFrameIndex( uint32_t frameNumber ) const;
 
