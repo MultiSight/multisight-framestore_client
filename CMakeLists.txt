@@ -6,8 +6,8 @@ set(SOURCES source/Frame.cpp
             source/ResultParser.cpp
             source/Video.cpp)
 
-set(WINDOWS_LIBS XSDK ws2_32 Webby)
-set(LINUX_LIBS XSDK Webby)
+set(WINDOWS_LIBS XSDK ws2_32 Webby AVKit)
+set(LINUX_LIBS XSDK Webby AVKit)
 
 include(common.cmake NO_POLICY_SCOPE)
 include("${devel_artifacts_path}/build/base_lib.cmake" NO_POLICY_SCOPE)

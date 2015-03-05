@@ -15,6 +15,8 @@
 #include "XSDK/XBaseObject.h"
 #include "XSDK/XMemory.h"
 #include "Webby/ClientSideResponse.h"
+#include "AVKit/Packet.h"
+#include "AVKit/PacketFactory.h"
 #include "MediaParser/Defines.h"
 
 namespace FRAME_STORE_CLIENT
@@ -61,8 +63,7 @@ public:
     X_API bool ReadFrame( int& streamIndex );
     X_API bool EndOfFile() const;
     X_API size_t GetFrameSize() const;
-    X_API void GetFrame( uint8_t* dest ) const;
-    X_API XIRef<XSDK::XMemory> GetFrame() const;
+    X_API XIRef<AVKit::Packet> Get();
 
     X_API uint8_t* GetFramePointer() const;
     X_API int64_t GetFrameTS() const;
@@ -107,6 +108,7 @@ private:
     uint32_t _numFrames;
     float _rate;
     XSDK::XString _SDPFrameRate;
+    XIRef<AVKit::PacketFactory> _pf;
 };
 
 }

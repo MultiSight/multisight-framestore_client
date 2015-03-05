@@ -23,9 +23,9 @@ namespace FRAME_STORE_CLIENT
 {
 
 XIRef<XMemory> FetchFrame( const XString& recorderIP,
-                           int recorderPort,
-                           const XString& dataSourceID,
-                           const XString& time )
+                          int recorderPort,
+                          const XString& dataSourceID,
+                          const XString& time )
 {
     ClientSideResponse frameResponse;
 
