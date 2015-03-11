@@ -1,4 +1,14 @@
 
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+//
+// XSDK
+// Copyright (c) 2015 Schneider Electric
+//
+// Use, modification, and distribution is subject to the Boost Software License,
+// Version 1.0 (See accompanying file LICENSE).
+//
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
 #include "FrameStoreClient/ResultParser.h"
 #include "XSDK/XBytePtr.h"
 #include "XSDK/XSocket.h"
@@ -8,6 +18,7 @@
 using namespace XSDK;
 using namespace std;
 using namespace FRAME_STORE_CLIENT;
+using namespace AVKit;
 
 static const int INDEX_ENTRY_SIZE = 48;
 
@@ -29,7 +40,8 @@ ResultParser::ResultParser() :
     _currentFrameNumber( -1 ),
     _numFrames( 0 ),
     _rate( 0.0 ),
-    _SDPFrameRate()
+    _SDPFrameRate(),
+    _pf( new PacketFactoryDefault() )
 {
 }
 
@@ -305,7 +317,7 @@ size_t ResultParser::GetFrameSize() const
     return (size_t)frameSize;
 }
 
-void ResultParser::GetFrame( uint8_t* dest ) const
+XIRef<Packet> ResultParser::Get()
 {
     if( !_ValidIterator() )
         X_THROW(("Invalid Iterator."));
@@ -324,19 +336,19 @@ void ResultParser::GetFrame( uint8_t* dest ) const
     int64_t offset = *((int64_t*)(index+indexOffset+8));
     int64_t frameSize = *((int64_t*)(index+indexOffset+16));
 
+    size_t packetBufferSize = (frameSize % 8)?frameSize+(8-(frameSize%8)):frameSize;
+
+    XIRef<Packet> pkt = _pf->Get( packetBufferSize );
+
     uint8_t* source = (uint8_t*)_response->Map();
 
-    memcpy( dest,
+    memcpy( pkt->Map(),
             (source+offset),
             (size_t)frameSize );
-}
 
-XIRef<XMemory> ResultParser::GetFrame() const
-{
-    XIRef<XMemory> frame = new XMemory;
-    frame->ResizeData( GetFrameSize() );
-    GetFrame( frame->Map() );
-    return frame;
+    pkt->SetDataSize( frameSize );
+
+    return pkt;
 }
 
 uint8_t* ResultParser::GetFramePointer() const

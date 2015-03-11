@@ -1,4 +1,14 @@
 
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+//
+// XSDK
+// Copyright (c) 2015 Schneider Electric
+//
+// Use, modification, and distribution is subject to the Boost Software License,
+// Version 1.0 (See accompanying file LICENSE).
+//
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
 #include "FrameStoreClient/Frame.h"
 #include "XSDK/XSocket.h"
 #include "Webby/ClientSideRequest.h"
@@ -13,9 +23,9 @@ namespace FRAME_STORE_CLIENT
 {
 
 XIRef<XMemory> FetchFrame( const XString& recorderIP,
-                           int recorderPort,
-                           const XString& dataSourceID,
-                           const XString& time )
+                          int recorderPort,
+                          const XString& dataSourceID,
+                          const XString& time )
 {
     ClientSideResponse frameResponse;
 
