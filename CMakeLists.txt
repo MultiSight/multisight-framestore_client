@@ -1,7 +1,11 @@
 cmake_minimum_required(VERSION 2.8)
 project(FrameStoreClient)
 
-set(SOURCES source/Frame.cpp
+set(SOURCES include/FrameStoreClient/Frame.h
+            include/FrameStoreClient/RecorderURLS.h
+            include/FrameStoreClient/ResultParser.h
+            include/FrameStoreClient/Video.h
+            source/Frame.cpp
             source/RecorderURLS.cpp
             source/ResultParser.cpp
             source/Video.cpp)

@@ -14,6 +14,7 @@
 #include "Webby/ClientSideRequest.h"
 #include "Webby/ClientSideResponse.h"
 #include "Webby/WebbyException.h"
+#include "Webby/StatusCodes.h"
 
 using namespace FRAME_STORE_CLIENT;
 using namespace XSDK;
@@ -54,6 +55,9 @@ XIRef<XMemory> FetchFrame( const XString& recorderIP,
 
         sok->Close();
     }
+
+    if( frameResponse.GetStatus() == WEBBY::kWebbyResponseNotFound )
+        X_STHROW( HTTP404Exception, ("Recorder return 404.") );
 
     if( frameResponse.GetBodySize() == 0 )
         X_STHROW( HTTP500Exception, ( "Zero length Recorder response to URI." ) );

@@ -11,9 +11,9 @@
 
 #include "FrameStoreClient/Video.h"
 #include "Webby/WebbyException.h"
+#include "Webby/StatusCodes.h"
 #include "Webby/ClientSideRequest.h"
 #include "Webby/ClientSideResponse.h"
-#include "XSDK/XRef.h"
 #include "XSDK/XSocket.h"
 #include "XSDK/XTime.h"
 
@@ -44,6 +44,9 @@ XIRef<XMemory> FetchVideo( const XString& recorderIP,
     response.ReadResponse( sok );
 
     sok->Close();
+
+    if( response.GetStatus() == WEBBY::kWebbyResponseNotFound )
+        X_STHROW( HTTP404Exception, ("Recorder return 404.") );
 
     if( response.GetBodySize() == 0 )
         X_STHROW( HTTP500Exception, ( "Zero length Recorder response to URI." ) );
@@ -80,6 +83,9 @@ XIRef<XMemory> FetchVideo( const XString& recorderIP,
     response.ReadResponse( sok );
 
     sok->Close();
+
+    if( response.GetStatus() == WEBBY::kWebbyResponseNotFound )
+        X_STHROW( HTTP404Exception, ("Recorder return 404.") );
 
     if( response.GetBodySize() == 0 )
         X_STHROW( HTTP500Exception, ( "Zero length Recorder response to URI." ) );
