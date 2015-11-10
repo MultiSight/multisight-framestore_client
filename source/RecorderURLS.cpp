@@ -78,24 +78,22 @@ bool RecorderURLS::GetNextURL( XString& url )
     if( _firstRequest )
         _requestStart = XTime::FromISOExtString( _startTime ).ToUnixTimeAsMSecs();
 
+    int64_t exportEnd = XTime::FromISOExtString( _endTime ).ToUnixTimeAsMSecs();
     int64_t requestStart = _requestStart;
-    int64_t requestEnd = 0;
+    int64_t requestEnd = _requestStart + _requestSize;
 
-    if( (_requestStart + _requestSize) >=
-        XTime::FromISOExtString( _endTime ).ToUnixTimeAsMSecs() )
+    // We never want to make a recorder request for a time window that is too small to return any frames (e.g. asking
+    // for all the video between 2 consecutive frames, I.E. NONE!). If the overall export happens to be just a few
+    // milliseconds over a multiple of _requestSize, then that exact thing can happen. To address this, we compare our
+    // computed requestEnd with our overall exportEnd... If it is bigger, then it should obviously be adjusted and set
+    // to our exportEnd. But even it is a bit smaller, it should be set to our exportEnd. If our requestEnd is 1.1
+    // seconds before our export end, then that is fine... because a request of 1.1 seconds should return frames.
+    if( requestEnd > (exportEnd - 1000) )
     {
         _done = true;
-
-        requestEnd = XTime::FromISOExtString( _endTime ).ToUnixTimeAsMSecs();
-
-        // no reason to update _requestStart here because we're done after this request.
+        requestEnd = exportEnd;
     }
-    else
-    {
-        requestEnd = _requestStart + _requestSize;
-
-        _requestStart = requestEnd;
-    }
+    else _requestStart = requestEnd;
 
     url = XString::Format( "/recorder/media?data_source_id=%s&start_time=%s&end_time=%s&key_frame_only=%s&previous_playable=%s",
                            _dataSourceID.c_str(),
@@ -104,7 +102,7 @@ bool RecorderURLS::GetNextURL( XString& url )
                            (_keyFrameOnly)?"true":"false",
                            (_firstRequest)?"true":"false" );
 
-    _firstRequest = false;
+    _firstRequest = false; // note: this needs to be after the Format() because its used there!
 
     return true;
 }
