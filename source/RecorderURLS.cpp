@@ -50,13 +50,13 @@ RecorderURLS::RecorderURLS( const XSDK::XString& dataSourceID,
     }
     else if( speed < 6.000 )
     {
-        _requestSize = 12000;
-        _keyFrameOnly = true;
+        _requestSize = 24000;
+        _keyFrameOnly = false;
     }
     else if( speed < 10.000 )
     {
-        _requestSize = 20000;
-        _keyFrameOnly = true;
+        _requestSize = 30000;
+        _keyFrameOnly = false;
     }
     else if( speed < 30.000 )
     {

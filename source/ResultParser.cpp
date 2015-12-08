@@ -14,6 +14,7 @@
 #include "XSDK/XSocket.h"
 #include "XSDK/XStatistics.h"
 #include <vector>
+#include <cmath>
 
 using namespace XSDK;
 using namespace std;
@@ -71,12 +72,18 @@ void ResultParser::Parse( XIRef<WEBBY::ClientSideResponse> response )
     _currentFrameNumber = -1;
 }
 
+template<class T>
+static T _round( T d, int place )
+{
+    return std::floor(d)+std::floor((d-std::floor(d))*((double)place)+0.5)/((double)place);
+}
+
 struct ResultStatistics ResultParser::GetStatistics()
 {
     struct ResultStatistics result;
 
     XStatistics<Average,size_t> avgFrameSize;
-    XStatistics<Average,int64_t> avgTimeDelta;
+    XStatistics<Average,double> avgTimeDelta;
 
     int64_t lastTS = 0;
 
@@ -128,14 +135,14 @@ struct ResultStatistics ResultParser::GetStatistics()
         currentIndex++;
     }
 
-    int64_t avgDelta = 0;
+    double avgDelta = 0;
     avgTimeDelta.GetResult( avgDelta );
 
     size_t avgSize = 0;
     avgFrameSize.GetResult( avgSize );
 
     result.averageBitRate = (uint32_t)(((1000 / (double)avgDelta) * (double)avgSize) * 8);
-    result.frameRate = 1000 / (double)avgDelta;
+    result.frameRate = _round( 1000 / avgDelta, 10 );
 
     Reset();
 
