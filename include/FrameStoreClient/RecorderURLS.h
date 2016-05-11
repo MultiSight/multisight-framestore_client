@@ -38,6 +38,8 @@ public:
 
     X_API bool KeyFrameOnly() const { return _keyFrameOnly; }
 
+    X_API float PercentComplete() const;
+
 private:
     RecorderURLS( const RecorderURLS& obj );
     RecorderURLS& operator = ( const RecorderURLS& obj );
@@ -45,7 +47,7 @@ private:
     XSDK::XString _dataSourceID;
     XSDK::XString _startTime;
     XSDK::XString _endTime;
-    int64_t _requestStart;
+    int64_t _nextRequest;
     bool _done;
     bool _firstRequest;
     int64_t _requestSize;
