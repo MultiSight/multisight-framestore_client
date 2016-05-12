@@ -9,7 +9,7 @@
 //
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-#include "FrameStoreClient/Video.h"
+#include "FrameStoreClient/Media.h"
 #include "Webby/WebbyException.h"
 #include "Webby/StatusCodes.h"
 #include "Webby/ClientSideRequest.h"
@@ -24,7 +24,7 @@ using namespace WEBBY;
 namespace FRAME_STORE_CLIENT
 {
 
-XIRef<XMemory> FetchVideo( const XString& recorderIP,
+XIRef<XMemory> FetchMedia( const XString& recorderIP,
                            int recorderPort,
                            const XString& url )
 {
@@ -54,11 +54,12 @@ XIRef<XMemory> FetchVideo( const XString& recorderIP,
     return response.GetBodyAsXMemory();
 }
 
-XIRef<XMemory> FetchVideo( const XString& recorderIP,
+XIRef<XMemory> FetchMedia( const XString& recorderIP,
                            int recorderPort,
                            const XString& dataSourceID,
                            const XString& startTime,
                            const XString& endTime,
+                           const XString& type,
                            bool previousPlayable,
                            bool keyFrameOnly )
 {
@@ -70,10 +71,11 @@ XIRef<XMemory> FetchVideo( const XString& recorderIP,
 
     request.SetRequestType( kWebbyGETRequest );
 
-    request.SetURI( XString::Format( "/media?data_source_id=%s&start_time=%s&end_time=%s&previous_playable=%s&key_frame_only=%s",
+    request.SetURI( XString::Format( "/media?data_source_id=%s&start_time=%s&end_time=%s&type=%s&previous_playable=%s&key_frame_only=%s",
                                      dataSourceID.c_str(),
                                      startTime.c_str(),
                                      endTime.c_str(),
+                                     type.c_str(),
                                      (previousPlayable) ? "true" : "false",
                                      (keyFrameOnly) ? "true" : "false" ) );
 

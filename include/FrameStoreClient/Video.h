@@ -9,23 +9,24 @@
 //
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-#ifndef __FRAME_STORE_CLIENT_Video_h
-#define __FRAME_STORE_CLIENT_Video_h
+#ifndef __FRAME_STORE_CLIENT_Media_h
+#define __FRAME_STORE_CLIENT_Media_h
 
 #include "XSDK/XMemory.h"
 
 namespace FRAME_STORE_CLIENT
 {
 
-X_API XIRef<XSDK::XMemory> FetchVideo( const XSDK::XString& recorderIP,
+X_API XIRef<XSDK::XMemory> FetchMedia( const XSDK::XString& recorderIP,
                                        int recorderPort,
                                        const XSDK::XString& url );
 
-X_API XIRef<XSDK::XMemory> FetchVideo( const XSDK::XString& recorderIP,
+X_API XIRef<XSDK::XMemory> FetchMedia( const XSDK::XString& recorderIP,
                                        int recorderPort,
                                        const XSDK::XString& dataSourceID,
                                        const XSDK::XString& startTime,
                                        const XSDK::XString& endTime,
+                                       const XSDK::XString& type = "video",
                                        bool previousPlayable = true,
                                        bool keyFrameOnly = false );
 
