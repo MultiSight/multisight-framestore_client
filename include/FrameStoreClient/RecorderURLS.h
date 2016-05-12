@@ -25,12 +25,14 @@ public:
                         const XSDK::XString& startTime,
                         const XSDK::XString& endTime,
                         int64_t requestSize,
+                        const XSDK::XString& type = "video",
                         bool keyFrameOnly = false );
 
     X_API RecorderURLS( const XSDK::XString& dataSourceID,
                         const XSDK::XString& startTime,
                         const XSDK::XString& endTime,
-                        double speed );
+                        double speed,
+                        const XSDK::XString& type = "video" );
 
     X_API ~RecorderURLS() throw();
 
@@ -47,6 +49,7 @@ private:
     XSDK::XString _dataSourceID;
     XSDK::XString _startTime;
     XSDK::XString _endTime;
+    XSDK::XString _type;
     int64_t _nextRequest;
     bool _done;
     bool _firstRequest;

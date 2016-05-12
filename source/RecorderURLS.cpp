@@ -20,10 +20,12 @@ RecorderURLS::RecorderURLS( const XSDK::XString& dataSourceID,
                             const XSDK::XString& startTime,
                             const XSDK::XString& endTime,
                             int64_t requestSize,
+                            const XSDK::XString& type,
                             bool keyFrameOnly ) :
     _dataSourceID( dataSourceID ),
     _startTime( startTime ),
     _endTime( endTime ),
+    _type( type ),
     _nextRequest( 0 ),
     _done( false ),
     _firstRequest( true ),
@@ -35,10 +37,12 @@ RecorderURLS::RecorderURLS( const XSDK::XString& dataSourceID,
 RecorderURLS::RecorderURLS( const XSDK::XString& dataSourceID,
                             const XSDK::XString& startTime,
                             const XSDK::XString& endTime,
-                            double speed ) :
+                            double speed,
+                            const XSDK::XString& type ) :
     _dataSourceID( dataSourceID ),
     _startTime( startTime ),
     _endTime( endTime ),
+    _type( type ),
     _nextRequest( 0 ),
     _done( false ),
     _firstRequest( true )
@@ -95,10 +99,11 @@ bool RecorderURLS::GetNextURL( XString& url )
     }
     else _nextRequest = requestEnd;
 
-    url = XString::Format( "/media?data_source_id=%s&start_time=%s&end_time=%s&key_frame_only=%s&previous_playable=%s",
+    url = XString::Format( "/media?data_source_id=%s&start_time=%s&end_time=%s&type=%s&key_frame_only=%s&previous_playable=%s",
                            _dataSourceID.c_str(),
                            XTime::CreateFromUnixTimeAsMSecs( requestStart ).ToISOExtString().c_str(),
                            XTime::CreateFromUnixTimeAsMSecs( requestEnd ).ToISOExtString().c_str(),
+                           _type.c_str(),
                            (_keyFrameOnly)?"true":"false",
                            (_firstRequest)?"true":"false" );
 

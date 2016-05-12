@@ -4,11 +4,11 @@ project(FrameStoreClient)
 set(SOURCES include/FrameStoreClient/Frame.h
             include/FrameStoreClient/RecorderURLS.h
             include/FrameStoreClient/ResultParser.h
-            include/FrameStoreClient/Video.h
+            include/FrameStoreClient/Media.h
             source/Frame.cpp
             source/RecorderURLS.cpp
             source/ResultParser.cpp
-            source/Video.cpp)
+            source/Media.cpp)
 
 set(WINDOWS_LIBS XSDK ws2_32 Webby AVKit)
 set(LINUX_LIBS XSDK Webby AVKit)
