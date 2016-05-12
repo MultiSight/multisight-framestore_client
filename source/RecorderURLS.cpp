@@ -97,8 +97,8 @@ bool RecorderURLS::GetNextURL( XString& url )
 
     url = XString::Format( "/media?data_source_id=%s&start_time=%s&end_time=%s&key_frame_only=%s&previous_playable=%s",
                            _dataSourceID.c_str(),
-                           XString::FromInt64( requestStart ).c_str(),
-                           XString::FromInt64( requestEnd ).c_str(),
+                           XTime::CreateFromUnixTimeAsMSecs( requestStart ).ToISOExtString().c_str(),
+                           XTime::CreateFromUnixTimeAsMSecs( requestEnd ).ToISOExtString().c_str(),
                            (_keyFrameOnly)?"true":"false",
                            (_firstRequest)?"true":"false" );
 

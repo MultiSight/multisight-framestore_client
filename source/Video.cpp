@@ -72,8 +72,8 @@ XIRef<XMemory> FetchVideo( const XString& recorderIP,
 
     request.SetURI( XString::Format( "/media?data_source_id=%s&start_time=%s&end_time=%s&previous_playable=%s&key_frame_only=%s",
                                      dataSourceID.c_str(),
-                                     XString::FromInt64( XTime::FromISOExtString( startTime ).ToUnixTimeAsMSecs() ).c_str(),
-                                     XString::FromInt64( XTime::FromISOExtString( endTime ).ToUnixTimeAsMSecs() ).c_str(),
+                                     startTime.c_str(),
+                                     endTime.c_str(),
                                      (previousPlayable) ? "true" : "false",
                                      (keyFrameOnly) ? "true" : "false" ) );
 
