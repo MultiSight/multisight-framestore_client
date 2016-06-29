@@ -19,7 +19,8 @@ namespace FRAME_STORE_CLIENT
 
 X_API XIRef<XSDK::XMemory> FetchMedia( const XSDK::XString& recorderIP,
                                        int recorderPort,
-                                       const XSDK::XString& url );
+                                       const XSDK::XString& url,
+                                       uint32_t recvTimeout = 10000 );
 
 X_API XIRef<XSDK::XMemory> FetchMedia( const XSDK::XString& recorderIP,
                                        int recorderPort,
@@ -28,7 +29,8 @@ X_API XIRef<XSDK::XMemory> FetchMedia( const XSDK::XString& recorderIP,
                                        const XSDK::XString& endTime,
                                        const XSDK::XString& type = "video",
                                        bool previousPlayable = true,
-                                       bool keyFrameOnly = false );
+                                       bool keyFrameOnly = false,
+                                       uint32_t recvTimeout = 10000 );
 
 }
 

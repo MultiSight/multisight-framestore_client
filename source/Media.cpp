@@ -26,11 +26,14 @@ namespace FRAME_STORE_CLIENT
 
 XIRef<XMemory> FetchMedia( const XString& recorderIP,
                            int recorderPort,
-                           const XString& url )
+                           const XString& url,
+                           uint32_t recvTimeout )
 {
     XRef<XSocket> sok = new XSocket;
 
     sok->Connect( recorderIP, recorderPort );
+
+    sok->SetRecvTimeout( recvTimeout );
 
     ClientSideRequest request;
 
@@ -61,11 +64,14 @@ XIRef<XMemory> FetchMedia( const XString& recorderIP,
                            const XString& endTime,
                            const XString& type,
                            bool previousPlayable,
-                           bool keyFrameOnly )
+                           bool keyFrameOnly,
+                           uint32_t recvTimeout )
 {
     XRef<XSocket> sok = new XSocket;
 
     sok->Connect( recorderIP, recorderPort );
+
+    sok->SetRecvTimeout( recvTimeout );
 
     ClientSideRequest request;
 
