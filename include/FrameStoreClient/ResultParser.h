@@ -58,6 +58,7 @@ public:
 
     X_API int GetVideoStreamIndex() const;
     X_API int GetPrimaryAudioStreamIndex() const;
+    X_API int GetMetaDataStreamIndex() const;
 
     // Iteration...
     X_API bool ReadFrame( int& streamIndex );

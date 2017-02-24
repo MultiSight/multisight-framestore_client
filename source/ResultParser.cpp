@@ -291,6 +291,11 @@ uint32_t ResultParser::GetSourceClockRate() const
     return sourceClockRate;
 }
 
+int ResultParser::GetMetaDataStreamIndex() const
+{
+    return 0;
+}
+
 int ResultParser::GetVideoStreamIndex() const
 {
     // For now, our video stream index is a fixed number... Eventually, we may support muxed content in a
