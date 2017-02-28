@@ -8,6 +8,7 @@ set(SOURCES include/FrameStoreClient/Frame.h
             source/Frame.cpp
             source/RecorderURLS.cpp
             source/ResultParser.cpp
+            source/DataSources.cpp
             source/Media.cpp)
 
 set(WINDOWS_LIBS XSDK ws2_32 Webby AVKit)
