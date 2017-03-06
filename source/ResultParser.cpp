@@ -489,6 +489,25 @@ float ResultParser::FractionConsumed() const
     return 0.0f;
 }
 
+int64_t ResultParser::GetFirstFrameTS() const
+{
+    if ( _numFrames < 1)
+        X_THROW(( "No Frames to get Time from." ));
+        
+    uint32_t indexSize = _index->GetDataSize();
+    const uint8_t* index = _index->Map();
+    const uint8_t* lastIndex = ((index + indexSize)-INDEX_ENTRY_SIZE);
+
+    uint32_t frameIndex = _GetFrameIndex( 0 );
+
+    uint32_t indexOffset = (frameIndex * INDEX_ENTRY_SIZE);
+
+    if( (index+indexOffset) > lastIndex )
+        X_THROW(( "Cannot access index out of range." ));
+
+    return *((int64_t*)(index+indexOffset));
+}
+
 int64_t ResultParser::GetLastFrameTS() const
 {
     uint32_t lastFrameNumber = (_numFrames - 1);
